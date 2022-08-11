@@ -18,13 +18,19 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function (AppProvider $appProvider) {
-    return view('chat-app-example', [
-        "port" => "6001",
-        "host" => "127.0.0.1",
-        "authEndpoint" => "/api/sockets/connect",
-        "logChannel" => DashboardLogger::LOG_CHANNEL_PREFIX,
-        "apps" => $appProvider->all()
-    ]);
+    // return view('chat-app-example', [
+    //     "port" => "6001",
+    //     "host" => "127.0.0.1",
+    //     "authEndpoint" => "/api/sockets/connect",
+    //     "logChannel" => DashboardLogger::LOG_CHANNEL_PREFIX,
+    //     "apps" => $appProvider->all()
+    // ]);
+    // if (auth()->user()) {
+    //     return redirect()->route('home');
+    // }else{
+    //     return redirect()->route('login');
+    // }
+    return view('index');
 });
 
 Route::post("/chat/send", function(Request $request) {
@@ -36,3 +42,11 @@ Route::post("/chat/send", function(Request $request) {
     }
     SendMessage::dispatch($name, $message, $time);
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home')->middleware('is_admin');
+
+Route::resource('festivals', App\Http\Controllers\FestivalController::class);

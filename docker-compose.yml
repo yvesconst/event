@@ -14,10 +14,10 @@ services:
         working_dir: /var/www
         volumes:
             - ./:/var/www
-        # ports:
-        #     - 8000:8000
-        expose:
-            - 8000
+        ports:
+            - 80:8000
+        # expose:
+        #     - 8000
         depends_on:
             - database
             - redis
@@ -29,10 +29,10 @@ services:
             target: php
             args:
                 - APP_ENV=Festiv4all
-        # environment:
-        #     - APP_ENV=${APP_ENV}
-        #     - CONTAINER_ROLE=websocket
-        env_file: .env
+        environment:
+            - APP_ENV=${APP_ENV}
+            - CONTAINER_ROLE=websocket
+        # env_file: .env
         working_dir: /var/www
         volumes:
             - ./:/var/www
@@ -49,10 +49,11 @@ services:
             - 3306:3306
         env_file: .env
         # environment:
-        #     - MYSQL_DATABASE=${DB_DATABASE}
-        #     - MYSQL_USER=${DB_USERNAME}
-        #     - MYSQL_PASSWORD=${DB_PASSWORD}
-        #     - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+        #     - MYSQL_HOST=localhost
+        #     - MYSQL_DATABASE=festiv4all
+        #     - MYSQL_USER=root
+        #     - MYSQL_PASSWORD=event
+        #     - MYSQL_ROOT_PASSWORD=event
         volumes:
             - db-data:/var/lib/mysql
 
@@ -70,10 +71,10 @@ services:
             target: php
             args:
                 - APP_ENV=Festiv4all
-        # environment:
-        #     - APP_ENV=${APP_ENV}
-        #     - CONTAINER_ROLE=queue
-        env_file: .env
+        environment:
+            - APP_ENV=${APP_ENV}
+            - CONTAINER_ROLE=queue
+        # env_file: .env
         working_dir: /var/www
         volumes:
             - ./:/var/www
@@ -88,18 +89,29 @@ services:
             - ./node_modules:/usr/src/node_modules
         tty: true
 
-    nginx:
-        image: nginx:alpine
-        restart: unless-stopped
+    phpmyadmin:
+        image: phpmyadmin
+        restart: always
         ports:
-            - 80:80
-        volumes:
-            - ./:/var/www
-            - ./nginx:/etc/nginx/conf.d
-        depends_on:
-            - php
-        # networks:
-        #     - travellist
+            - 8080:80
+        links:
+            - database
+        environment:
+            - PMA_ARBITRARY=1
+            - PMA_PORT=3306
+            - PMA_HOST=database
+    # nginx:
+    #     image: nginx:alpine
+    #     restart: unless-stopped
+    #     ports:
+    #         - 80:80
+    #     volumes:
+    #         - ./:/var/www
+    #         - ./nginx:/etc/nginx/conf.d
+    #     depends_on:
+    #         - php
+    # networks:
+    #     - travellist
 
 volumes:
     db-data: ~
