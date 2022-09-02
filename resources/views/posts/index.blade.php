@@ -1,6 +1,7 @@
 @extends('layouts.app')
+@section("title", "Tous les posts")
+@section("content")
 
-@section('content')
 <div class="row">
 <div class="col-sm-2"></div>
 <div class="col-sm-8">
@@ -9,7 +10,7 @@
     <div class="e-panel card">
         <div class="card-body">
         <div class="card-title">
-            <a class="btn btn-success" href="{{ route('festivals.create') }}"> Create New Festival</a>
+            <a class="btn btn-success" href="{{ route('posts.create') }}"> Créer un nouveau post</a>
         </div>
         <div class="e-table">
             <div class="table-responsive table-lg mt-3">
@@ -26,34 +27,34 @@
             <th class="align-top">
             No
             </th>
-            <th class="max-width">Name</th>
-            <th class="sortable">Date</th>
-            <th>Active</th>
+            <th class="max-width">Titre</th>
+            <th class="sortable">Date de création</th>
+            <th>Contenu</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        @foreach ($festivals as $fest)
+        @foreach ($posts as $post)
         <tr>
             <td class="align-middle">
-            {{ ++$i }}
+            {{ $post->id }}
             </td>
-            <td class="text-nowrap align-middle">{{ $fest->name }}</td>
-            <td class="text-nowrap align-middle justify-content-center"><span>Du {{ $fest->start_at->format('Y-m-d') }}</span> <span> au {{ $fest->end_on->format('Y-m-d') }}</span></td>
-            <td class="text-center align-middle"><i class="fa fa-fw text-secondary cursor-pointer fa-toggle-on"></i></td>
+            <td class="text-nowrap align-middle">{{ $post->title }}</td>
+            <td class="text-nowrap align-middle justify-content-center"><span>{{ $post->created_at->format('Y-m-d') }}</span></td>
+            <td class="text-center align-middle">{{ $post->content }}</td>
             <td class="text-center align-middle">
             <div class="btn-group align-top">
 
-                <form action="{{ route('festivals.destroy',$fest->id) }}" method="POST">
+                <form action="{{ route('posts.destroy',$post->id) }}" method="POST">
 
-                    <a class="btn btn-info" href="{{ route('festivals.show',$fest->id) }}">Show</a>
+                    <a class="btn btn-info" href="{{ route('posts.show',$post->id) }}">Show</a>
 
-                    <a class="btn btn-secondary" href="{{ route('festivals.edit',$fest->id) }}">Edit</a>
+                    <a class="btn btn-secondary" href="{{ route('posts.edit',$post->id) }}">Edit</a>
 
                     @csrf
                     @method('DELETE')
 
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
                 </form>
 
 
@@ -84,7 +85,6 @@
     </div>
 </div>
 
-    {!! $festivals->links() !!}
 <div class="col-sm-2"></div>
 </div>
 @endsection

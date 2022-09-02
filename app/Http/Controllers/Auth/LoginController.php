@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class LoginController extends Controller
 {
@@ -60,6 +63,13 @@ class LoginController extends Controller
                 ->with('error','Email-Address And Password Are Wrong.');
         }
 
+    }
+
+    public function logout(Request $request){
+        Session::flush();
+        Auth::logout();
+        $posts = Post::latest()->get();
+        return view('index', ['posts' => $posts]);
     }
 }
 

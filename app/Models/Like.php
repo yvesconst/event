@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-
-class Festival extends Model
+class Like extends Model
 {
     use HasFactory;
-
     protected $fillable = [
-        'name', 'is_active',
+        'id', 'lkd', 'post_id', 'user_id',
     ];
 
-    protected $dates = ['start_at', 'end_on',];
+    protected $dates = ['liked_at',];
 
     public function post(){
-        return $this->hasMany(Post::class, 'p_id');
+        return $this->belongsTo(Post::class);
     }
 }

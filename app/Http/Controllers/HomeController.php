@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Post;
+use DB;
+
 class HomeController extends Controller
 {
     /**
@@ -23,7 +26,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $posts = Post::latest()->get();
+        $dates = DB::select('select distinct YEAR(start_at) as annee from festivals');
+        $dates = collect($dates)->pluck('annee')->toArray();
+        return view('adminHome', compact("posts"), ["dates" => $dates]);
     }
 
     /**
@@ -33,6 +39,9 @@ class HomeController extends Controller
      */
     public function adminHome()
     {
-        return view('adminHome');
+        $posts = Post::latest()->get();
+        $dates = DB::select('select distinct YEAR(start_at) as annee from festivals');
+        $dates = collect($dates)->pluck('annee')->toArray();
+        return view('adminHome', compact("posts"), ["dates" => $dates]);
     }
 }

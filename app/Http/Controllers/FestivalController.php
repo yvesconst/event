@@ -40,7 +40,13 @@ class FestivalController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'detail' => 'required',
+            'start_at' => 'required',
+            'end_on' => 'required',
+        ]);
+
+        $isChecked = $request->has('is_active') ? 1 : 0;
+        $request->merge([
+            'is_active' => $isChecked,
         ]);
 
         Festival::create($request->all());
@@ -82,7 +88,13 @@ class FestivalController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'detail' => 'required',
+            'start_at' => 'required',
+            'end_on' => 'required',
+        ]);
+
+        $isChecked = $request->has('is_active') ? 1 : 0;
+        $request->merge([
+            'is_active' => $isChecked,
         ]);
 
         $festival->update($request->all());
